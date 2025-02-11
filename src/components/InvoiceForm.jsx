@@ -364,7 +364,7 @@ export default function InvoiceForm({ invoice = null, isOpen, onClose }) {
                       </SelectTrigger>
                       <SelectContent>
                         <SelectGroup>
-                          <SelectLabel>Days</SelectLabel>
+                          {/* <SelectLabel>Days</SelectLabel> */}
                           <SelectItem value="1">Next 1 day</SelectItem>
                           <SelectItem value="7">Next 7 day</SelectItem>
                           <SelectItem value="14">Next 14 day</SelectItem>

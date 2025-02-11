@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import useStore from "../store/useStore";
 import { Button } from "@/components/ui/button";
 import InvoiceForm from "./InvoiceForm";
-
+import EmptyImg from "../assets/empty-img.png";
 export default function InvoicesList() {
   const navigate = useNavigate();
   const { invoices, isDarkMode, selectedFilter, setFilter, addInvoice } =
@@ -17,7 +17,7 @@ export default function InvoicesList() {
 
   return (
     <div
-      className={`min-h-screen ${
+      className={`min-h-screen md:pl-20 ${
         isDarkMode ? "bg-[#141625] text-white" : "bg-[#f8f8fb]"
       }`}
     >
@@ -30,20 +30,20 @@ export default function InvoicesList() {
         }}
       />
       <div className="max-w-3xl mx-auto p-6">
-        <div className="flex justify-between items-center mb-8 flex-wrap">
-          <div>
+        <div className="flex justify-between items-center mb-8 gap-4 flex-wrap">
+          <div className="flex flex-col gap-2">
             <h1 className="text-2xl font-bold">Invoices</h1>
             <p className="text-gray-500">
               There are {filteredInvoices.length} total invoices
             </p>
           </div>
 
-          <div className="flex gap-4 items-center">
+          <div className="grid grid-cols-2 gap-4 items-center">
             <select
               value={selectedFilter}
               onChange={(e) => setFilter(e.target.value)}
               className={`
-                px-4 font-bold rounded-lg  outline-none 
+                px-4 font-bold rounded-lg outline-none 
                 ${isDarkMode ? " text-white bg-[#141625] " : "bg-transparent"}
               `}
             >
@@ -56,7 +56,7 @@ export default function InvoicesList() {
             <Button
               onClick={() => setIsNewInvoiceOpen(true)}
               className={`
-                p-6  rounded-full font-bold flex items-center gap-2
+                md:p-6 p-2  rounded-full font-bold flex items-center gap-2
                 ${
                   isDarkMode
                     ? "bg-[#7c5dfa] text-white"
@@ -64,7 +64,7 @@ export default function InvoicesList() {
                 }
               `}
             >
-              <span className="h-8 w-8 rounded-full bg-white text-purple-600 flex items-center justify-center">
+              <span className="md:h-8 md:w-8 h-4 w-4 rounded-full bg-white text-purple-600 flex items-center justify-center">
                 +
               </span>
               New <span className="hidden sm:block"> Invoice</span>
@@ -73,6 +73,22 @@ export default function InvoicesList() {
         </div>
 
         <div className="space-y-4 fex flex-wrap">
+          {filteredInvoices.length <= 0 && (
+            <div className="flex flex-col items-center justify-center text-center mt-[102px]">
+              <img
+                className="mb-[40px] md:mb-[64px] max-w-[241px] w-[100%] max-h-[200px] h-[100%] "
+                src={EmptyImg}
+                alt="empty logo"
+              />
+              <h1 className="text-[20px] text-[#0C0E16] mb-[24px] font-bold animate-slide-down dark:text-white">
+                There is nothing here
+              </h1>
+              <p className="text-[#888EB0] text-[12px] animate-slide-down dark:text-[#DFE3FA]">
+                Create an invoice by clicking the <br />
+                <span className="font-bold"> New</span> button and get started
+              </p>
+            </div>
+          )}
           {filteredInvoices.map((invoice) => (
             <div
               key={invoice.id}
@@ -99,7 +115,7 @@ export default function InvoicesList() {
                   ${
                     invoice.status === "paid"
                       ? "bg-green-100 text-green-600"
-                      : invoice.status === "pending"
+                      : invoice.status == "pending"
                       ? "bg-orange-100 text-orange-600"
                       : "bg-gray-100 text-gray-600"
                   }

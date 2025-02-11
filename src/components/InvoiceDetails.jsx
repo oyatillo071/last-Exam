@@ -33,7 +33,7 @@ export default function InvoiceDetails() {
 
   return (
     <div
-      className={`min-h-screen pb-20 sm:pl-20 ${
+      className={`min-h-screen md:pb-20 sm:pl-20 ${
         isDarkMode ? "bg-[#141625] text-white" : "bg-[#f8f8fb]"
       }`}
     >
