@@ -11,7 +11,7 @@ export default function Sidebar() {
   return (
     <div
       className={`
-        w-full h-16 flex items-center justify-between pr-6 md:w-16 md:min-h-screen md:p-0 md:flex-col md:fixed 
+        w-full h-16 md:rounded-r-3xl rounded-none flex items-center justify-between pr-6 md:w-16 md:min-h-screen md:p-0 md:flex-col md:fixed 
         ${isDarkMode ? "bg-[#1e2139]" : "bg-[#373b53]"}
       `}
     >
@@ -19,7 +19,7 @@ export default function Sidebar() {
         onClick={() => {
           navigate("/");
         }}
-        className="h-16 w-16 flex items-center justify-center rounded-r-3xl"
+        className="h-16 w-16 cursor-pointer flex items-center justify-center rounded-r-3xl"
       >
         <img src={Logo} alt="logo" width={64} height={64} />
       </div>

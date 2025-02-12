@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import useStore from "../store/useStore";
 import { Button } from "@/components/ui/button";
-import InvoiceForm from "./InvoiceForm";
+import InvoiceForm from "../components/InvoiceForm";
 import { SlArrowRight } from "react-icons/sl";
 import EmptyImg from "../assets/empty-img.png";
 export default function InvoicesList() {
@@ -39,12 +39,12 @@ export default function InvoicesList() {
             </p>
           </div>
 
-          <div className="grid grid-cols-2  gap-4 items-center">
+          <div className="flex flex-wrap justify-between w-full md:w-[50%]  gap-4 items-center">
             <select
               value={selectedFilter}
               onChange={(e) => setFilter(e.target.value)}
               className={`
-                px-4 font-bold rounded-lg outline-none 
+                px-4 font-bold rounded-lg outline-none cursor-pointer
                 ${isDarkMode ? " text-white bg-[#141625] " : "bg-transparent"}
               `}
             >
@@ -57,15 +57,15 @@ export default function InvoicesList() {
             <Button
               onClick={() => setIsNewInvoiceOpen(true)}
               className={`
-                md:p-6 p-2  rounded-full font-bold flex items-center gap-2
+                md:p-6 rounded-full hover:bg-purple-500 font-bold flex items-center gap-2
                 ${
                   isDarkMode
-                    ? "bg-[#7c5dfa] text-white"
-                    : "bg-purple-600 text-white"
+                    ? "bg-[#7c5dfa] text-white "
+                    : "bg-purple-600 text-white "
                 }
               `}
             >
-              <span className="md:h-8 md:w-8 h-4 w-4 rounded-full bg-white text-purple-600 flex items-center justify-center">
+              <span className="md:h-8 md:w-8 h-6 w-6 rounded-full bg-white text-purple-600 flex items-center justify-center">
                 +
               </span>
               New <span className="hidden sm:block"> Invoice</span>
@@ -118,7 +118,7 @@ export default function InvoicesList() {
                 <span className="sm:hidden">{invoice.clientName}</span>
                 <div
                   className={`
-                  px-4 py-2 w-24 rounded-md flex items-center gap-2 
+                  px-4 py-2 w-28 rounded-md flex items-center gap-2 
                   ${
                     invoice.status === "paid"
                       ? "bg-green-100 text-green-600"

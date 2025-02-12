@@ -9,7 +9,7 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
-import InvoiceForm from "./InvoiceForm";
+import InvoiceForm from "../components/InvoiceForm";
 
 export default function InvoiceDetails() {
   const { id } = useParams();
@@ -20,8 +20,6 @@ export default function InvoiceDetails() {
 
   const invoice = invoices.find((inv) => inv.id === id);
 
-  if (!invoice) return <div>Invoice not found</div>;
-
   const handleDelete = () => {
     deleteInvoice(id);
     navigate("/");
@@ -31,6 +29,8 @@ export default function InvoiceDetails() {
     updateInvoice(id, { status: newStatus });
   };
 
+  if (!invoice)
+    return <div className="text-center mt-40 text-2xl">Invoice not found</div>;
   return (
     <div
       className={`min-h-screen md:pb-20 md:pl-20 ${
@@ -62,14 +62,14 @@ export default function InvoiceDetails() {
         `}
         >
           <div className="flex items-center gap-4 justify-between w-full sm:w-40">
-            <h2 className="text-gray-500 text-2xl">Status</h2>
+            <h2 className="text-[#858BB2] ">Status</h2>
             <div
               className={`
               px-4 py-2 rounded-md flex items-center gap-2
               ${
                 invoice.status === "paid"
                   ? "bg-green-100 text-green-600"
-                  : "bg-orange-100 text-orange-600"
+                  : "bg-[#FF8F00] bg-opacity-25 text-[#FF8F00]"
               }
             `}
             >
@@ -82,7 +82,7 @@ export default function InvoiceDetails() {
             <Button
               variant="secondary"
               onClick={() => setIsEditMode(true)}
-              className={isDarkMode ? "bg-[#252945] text-white" : ""}
+              className={`rounded-3xl   text-white bg-[#252945] `}
             >
               Edit
             </Button>
@@ -133,50 +133,59 @@ export default function InvoiceDetails() {
           rounded-lg shadow-lg p-6
         `}
         >
-          <div className="grid md:grid-cols-2 gap-8 mb-8">
+          <div className="flex justify-between flex-wrap gap-8 mb-8">
             <div>
               <h1 className="text-xl font-bold mb-1">#{invoice.id}</h1>
-              <p className="text-gray-500">{invoice.description}</p>
+              <p className="">{invoice.description}</p>
             </div>
-            <div className="text-gray-500">
+            <div className="">
               <p>{invoice.senderAddress.street}</p>
               <p>{invoice.senderAddress.city}</p>
               <p>{invoice.senderAddress.postCode}</p>
               <p>{invoice.senderAddress.country}</p>
             </div>
           </div>
-
           <div className="grid md:grid-cols-3 grid-cols-2 gap-8 mb-8">
             <div>
               <div className="mb-8">
-                <p className="text-gray-500 mb-2">Invoice Date</p>
+                <p className=" mb-2">Invoice Date</p>
                 <p className="font-bold">{invoice.createdAt}</p>
               </div>
               <div>
-                <p className="text-gray-500 mb-2">Payment Due</p>
+                <p className=" mb-2">Payment Due</p>
                 <p className="font-bold">{invoice.paymentDue}</p>
               </div>
             </div>
 
             <div>
-              <p className="text-gray-500 mb-2">Bill To</p>
+              <p className=" mb-2">Bill To</p>
               <p className="font-bold mb-2">{invoice.clientName}</p>
-              <div className="text-gray-500">
+              <div className="">
                 <p>{invoice.clientAddress.street}</p>
                 <p>{invoice.clientAddress.city}</p>
                 <p>{invoice.clientAddress.postCode}</p>
                 <p>{invoice.clientAddress.country}</p>
               </div>
             </div>
-
-            <div>
-              <p className="text-gray-500 mb-2">Sent to</p>
-              <p className="font-bold  whitespace-nowrap break-words">
-                {invoice.clientEmail}
-              </p>
-            </div>
+            {invoice.clientEmail.length < 20 && (
+              <div>
+                <p className=" mb-2">Sent to</p>
+                <h2 className="font-bold  whitespace-nowrap break-words">
+                  {invoice.clientEmail}
+                </h2>
+              </div>
+            )}
           </div>
-
+          <div
+            className={` my-4 ${
+              invoice?.clientEmail?.length > 20 ? "block" : "hidden"
+            }`}
+          >
+            <p className=" mb-2">Sent to</p>
+            <h2 className="font-bold  whitespace-nowrap text-sm md:text-base break-words">
+              {invoice.clientEmail}
+            </h2>
+          </div>
           {/* Items Table */}
           <div
             className={`
@@ -185,7 +194,7 @@ export default function InvoiceDetails() {
           `}
           >
             <table className="w-full mb-8 text-xs sm:text-base">
-              <thead className="text-gray-500 text-left">
+              <thead className=" text-left">
                 <tr>
                   <th className="py-4">Item Name</th>
                   <th className="text-center">QTY.</th>
@@ -197,12 +206,8 @@ export default function InvoiceDetails() {
                 {invoice.items.map((item, index) => (
                   <tr key={index}>
                     <td className="py-4 font-bold">{item.name}</td>
-                    <td className="text-center text-gray-500">
-                      {item.quantity}
-                    </td>
-                    <td className="text-right text-gray-500">
-                      £ {item?.price}
-                    </td>
+                    <td className="text-center ">{item.quantity}</td>
+                    <td className="text-right ">£ {item?.price}</td>
                     <td className="text-right font-bold">
                       £ {item.total.toFixed(2)}
                     </td>
@@ -224,13 +229,15 @@ export default function InvoiceDetails() {
             </div>
           </div>
         </div>
-        <div className=" gap-4 justify-around flex-wrap sm:hidden sticky bottom-0 right-0 items-center content-center bg-[#1E2139] p-4 min-h-24 w-full flex">
+        <div
+          className={` gap-4 justify-around flex-wrap sm:hidden sticky bottom-0 right-0 items-center content-center  p-4 min-h-24 w-full flex  ${
+            isDarkMode ? "bg-[#1E2139]" : "bg-white"
+          }`}
+        >
           <Button
             variant="secondary"
             onClick={() => setIsEditMode(true)}
-            className={
-              isDarkMode ? "bg-[#252945] px-8 py-6 rounded-3xl text-white" : ""
-            }
+            className={`px-8 py-6 bg-[#252945] rounded-3xl text-white`}
           >
             Edit
           </Button>

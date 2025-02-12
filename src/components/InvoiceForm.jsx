@@ -104,6 +104,17 @@ export default function InvoiceForm({ invoice = null, isOpen, onClose }) {
     setFormData((prevFormData) => ({ ...prevFormData, items: newItems }));
   };
 
+  // edit mode  da dataa picker ishlamagani uchun yozdim
+  useEffect(() => {
+    if (invoice) {
+      setFormData(invoice);
+      setDate(invoice.createdAt, "yyyy-MM-dd", new Date());
+    } else {
+      setFormData(initialFormState);
+      setDate(null);
+    }
+  }, [invoice]);
+
   // item qoshish
   const handleAddItem = () => {
     setFormData((prevFormData) => ({
@@ -217,8 +228,17 @@ export default function InvoiceForm({ invoice = null, isOpen, onClose }) {
           }`}
         >
           <SheetHeader>
-            <SheetTitle className={isDarkMode ? "text-white" : "text-black"}>
-              {invoice ? `Edit ${formData.id}` : "Add New Invoice"}
+            <SheetTitle
+              className={`text-2xl ${isDarkMode ? "text-white" : "text-black"}`}
+            >
+              {invoice ? (
+                <p>
+                  Edit <span className="text-[#7E88C3]">#</span>
+                  {formData.id}
+                </p>
+              ) : (
+                "Add New Invoice"
+              )}
             </SheetTitle>
           </SheetHeader>
           <form
@@ -277,7 +297,7 @@ export default function InvoiceForm({ invoice = null, isOpen, onClose }) {
                     <Input
                       id="clientName"
                       name="clientName"
-                      minlength="4"
+                      minLength="4"
                       value={formData.clientName}
                       onChange={handleInputChange}
                       className={
@@ -328,13 +348,13 @@ export default function InvoiceForm({ invoice = null, isOpen, onClose }) {
                           {date ? (
                             format(date, "PPP")
                           ) : (
-                            <h2
-                              className={`${
+                            <span
+                              className={
                                 isDarkMode ? "text-white" : "text-black"
-                              }`}
+                              }
                             >
                               Pick a date
-                            </h2>
+                            </span>
                           )}
                           <FaCalendarAlt />
                         </Button>
@@ -355,6 +375,7 @@ export default function InvoiceForm({ invoice = null, isOpen, onClose }) {
                       </PopoverContent>
                     </Popover>
                   </div>
+                  {console.log(formData.paymentTerms)}
                   <div>
                     <Label htmlFor="paymentTerms">Payments Terms (days)</Label>
                     <Select
@@ -363,7 +384,7 @@ export default function InvoiceForm({ invoice = null, isOpen, onClose }) {
                       required
                       type="number"
                       defaultValue="1"
-                      value={formData.paymentTerms}
+                      value={formData.paymentTerms.toString()}
                       onValueChange={(value) => {
                         console.log(value);
 
@@ -445,7 +466,7 @@ export default function InvoiceForm({ invoice = null, isOpen, onClose }) {
                 </div>
               </div>
               <div className="mt-10">
-                <Label htmlFor="description">Description</Label>
+                <Label htmlFor="description">Project / Description</Label>
                 <Input
                   id="description"
                   name="description"
@@ -460,8 +481,8 @@ export default function InvoiceForm({ invoice = null, isOpen, onClose }) {
                 )}
               </div>
               <div className="my-10">
-                <h3 className="font-bold mb-2">Mahsulotlar</h3>
-                {formData.items.map((item, index) => (
+                <h3 className="font-bold mb-2">Items</h3>
+                {formData?.items.map((item, index) => (
                   <div
                     key={index}
                     className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-4"
@@ -470,7 +491,7 @@ export default function InvoiceForm({ invoice = null, isOpen, onClose }) {
                       <Label htmlFor={`itemName${index}`}>Nomi</Label>
                       <Input
                         id={`itemName${index}`}
-                        minlength="4"
+                        minLength="4"
                         value={item.name}
                         onChange={(e) =>
                           handleItemChange(index, "name", e.target.value)
@@ -578,7 +599,7 @@ export default function InvoiceForm({ invoice = null, isOpen, onClose }) {
                   <Button
                     type="button"
                     onClick={(e) => handleSubmit(e, true)}
-                    className="p-4 sm:p-6 bg-gray-700 rounded-2xl "
+                    className="p-4 sm:p-6 bg-gray-700 hover:bg-gray-500 rounded-2xl "
                   >
                     <span className="hidden sm:block"> Add as</span> Draft
                   </Button>
