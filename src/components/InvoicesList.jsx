@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import useStore from "../store/useStore";
 import { Button } from "@/components/ui/button";
 import InvoiceForm from "./InvoiceForm";
+import { SlArrowRight } from "react-icons/sl";
 import EmptyImg from "../assets/empty-img.png";
 export default function InvoicesList() {
   const navigate = useNavigate();
@@ -38,7 +39,7 @@ export default function InvoicesList() {
             </p>
           </div>
 
-          <div className="grid grid-cols-2 gap-4 items-center">
+          <div className="grid grid-cols-2  gap-4 items-center">
             <select
               value={selectedFilter}
               onChange={(e) => setFilter(e.target.value)}
@@ -94,24 +95,30 @@ export default function InvoicesList() {
               key={invoice.id}
               className={`
                 ${isDarkMode ? "bg-[#1e2139]" : "bg-white"}
-                p-6 rounded-lg shadow-lg flex items-center justify-between flex-wrap
-                cursor-pointer hover:border hover:border-purple-600 transition-all
+                 p-6 rounded-lg text-left shadow-lg  flex items-center justify-between relative flex-wrap
+                cursor-pointer hover:border hover:border-purple-600 md:pr-10 transition-all
               `}
               onClick={() => navigate(`/invoice/${invoice.id}`)}
             >
-              <div className="flex gap-8 min-w-0.5 items-center flex-wrap">
-                <span className="font-bold">#{invoice.id}</span>
+              <div className="flex gap-4 text-left min-w-0.5 items-center flex-col sm:flex-row ">
+                <span className="font-bold text-lg md:text-xl text-left">
+                  #{invoice.id}
+                </span>
                 <span className="text-gray-500">Due {invoice.paymentDue}</span>
-                <span>{invoice.clientName}</span>
-              </div>
-
-              <div className="flex gap-8 items-center min-w-0.5 flex-wrap">
-                <span className="text-xl font-bold">
+                <span className="hidden sm:block">{invoice.clientName}</span>
+                <span className="text-xl sm:hidden  font-bold">
                   £ {invoice.total.toFixed(2)}
                 </span>
+              </div>
+
+              <div className="flex gap-8 items-center min-w-0.5 sm:flex-row flex-col">
+                <span className="text-xl hidden sm:block font-bold">
+                  £ {invoice.total.toFixed(2)}
+                </span>
+                <span className="sm:hidden">{invoice.clientName}</span>
                 <div
                   className={`
-                  px-4 py-2 rounded-md flex items-center gap-2 
+                  px-4 py-2 w-24 rounded-md flex items-center gap-2 
                   ${
                     invoice.status === "paid"
                       ? "bg-green-100 text-green-600"
@@ -126,6 +133,7 @@ export default function InvoicesList() {
                     invoice.status.slice(1)}
                 </div>
               </div>
+              <SlArrowRight className="absolute md:block hidden  top-[40%] right-3" />
             </div>
           ))}
         </div>

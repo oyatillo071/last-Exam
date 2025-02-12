@@ -29,6 +29,7 @@ import {
 import { toast, Toaster } from "sonner";
 import useStore from "../store/useStore";
 import { MdDelete } from "react-icons/md";
+import { format } from "date-fns";
 const initialFormState = {
   id: null,
   clientName: "",
@@ -93,6 +94,7 @@ export default function InvoiceForm({ invoice = null, isOpen, onClose }) {
     }));
   };
 
+  // items ochargarda boshqarish
   const handleItemChange = (index, field, value) => {
     const newItems = [...formData.items];
     newItems[index] = { ...newItems[index], [field]: value };
@@ -102,6 +104,7 @@ export default function InvoiceForm({ invoice = null, isOpen, onClose }) {
     setFormData((prevFormData) => ({ ...prevFormData, items: newItems }));
   };
 
+  // item qoshish
   const handleAddItem = () => {
     setFormData((prevFormData) => ({
       ...prevFormData,
@@ -111,6 +114,8 @@ export default function InvoiceForm({ invoice = null, isOpen, onClose }) {
       ],
     }));
   };
+
+  // item ochirish
   const handleRemoveItem = (index) => {
     const newItems = [...formData.items];
     newItems.splice(index, 1);
@@ -119,17 +124,20 @@ export default function InvoiceForm({ invoice = null, isOpen, onClose }) {
 
   const validateForm = () => {
     const newErrors = {};
-    if (!formData.clientName.trim())
-      newErrors.clientName = "Mijoz nomi kiritilishi shart";
+    if (!formData.clientName.trim().length > 4)
+      newErrors.clientName =
+        "Mijoz nomi kiritilishi shart va kamida 4 ta belgidan iborat bolishi kerak";
 
-    if (!formData.clientEmail.trim())
-      newErrors.clientEmail = "Mijoz emaili kiritilishi shart";
+    if (!formData.clientEmail.trim().length > 4)
+      newErrors.clientEmail =
+        "Mijoz emaili kiritilishi shart yoki kamida 4 ta belgidan ioat bolishi kerak";
 
     if (!/^\S+@\S+\.\S+$/.test(formData.clientEmail))
       newErrors.clientEmail = "Noto'g'ri email formati";
 
-    if (!formData.description.trim())
-      newErrors.description = "Tavsif kiritilishi shart";
+    if (!formData.description.trim().length > 10)
+      newErrors.description =
+        "Tavsif kiritilishi shart va kamida 10 ta belgidan iborat bolishi kerak";
 
     if (!formData.paymentTerms || formData.paymentTerms <= 0)
       newErrors.paymentTerms = "To'g'ri to'lov muddatini kiriting";
@@ -156,13 +164,15 @@ export default function InvoiceForm({ invoice = null, isOpen, onClose }) {
       });
 
     formData.items.forEach((item, index) => {
-      if (!item.name.trim())
-        newErrors[`item${index}Name`] = "Mahsulot nomi kiritilishi shart";
+      if (!item.name.trim().length > 2)
+        newErrors[`item${index}Name`] =
+          "Mahsulot nomi kiritilishi shart va kamida 4 ta belgidan iborat bolishi kerak";
       if (!item.quantity || item.quantity <= 0)
         newErrors[`item${index}Quantity`] = "Miqdor 0 dan katta bo'lishi kerak";
       if (!item.price || item.price <= 0)
         newErrors[`item${index}Price`] = "Narx 0 dan katta bo'lishi kerak";
     });
+
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
@@ -215,7 +225,7 @@ export default function InvoiceForm({ invoice = null, isOpen, onClose }) {
             onSubmit={(e) => handleSubmit(e, false)}
             className="space-y-6 mt-6"
           >
-            <div className="h-[80vh] py-6 px-1  overflow-y-scroll">
+            <div className="h-[80vh] py-6 px-2  overflow-y-scroll">
               <div className="space-y-4  ">
                 <div>
                   <h3 className="font-extralight text-[#7C5DFA] mb-10">
@@ -281,7 +291,7 @@ export default function InvoiceForm({ invoice = null, isOpen, onClose }) {
                     )}
                   </div>
                 </div>
-                <div>
+                <div className="my-10">
                   <Label htmlFor="clientEmail">Client Email</Label>
                   <Input
                     id="clientEmail"
@@ -300,24 +310,36 @@ export default function InvoiceForm({ invoice = null, isOpen, onClose }) {
                 </div>
 
                 <div className="grid md:grid-cols-2 grid-cols-1 gap-4  items-center">
-                  <div>
-                    <Label htmlFor="paymentTerms">Pick a Date</Label>
-
+                  <div className="flex flex-col gap-4  ">
+                    <Label htmlFor="paymentTerms" className="whitespace-nowrap">
+                      Pick a Date
+                    </Label>
                     <Popover>
                       <PopoverTrigger asChild>
                         <Button
                           variant={"outline"}
                           className={cn(
-                            `w-[280px] justify-start text-left   font-normal ${
+                            ` justify-between px-6 text-left   font-normal ${
                               isDarkMode ? "bg-[#1E2139] border-none" : "border"
                             }`,
                             !date && "text-muted-foreground"
                           )}
                         >
+                          {date ? (
+                            format(date, "PPP")
+                          ) : (
+                            <h2
+                              className={`${
+                                isDarkMode ? "text-white" : "text-black"
+                              }`}
+                            >
+                              Pick a date
+                            </h2>
+                          )}
                           <FaCalendarAlt />
                         </Button>
                       </PopoverTrigger>
-                      <PopoverContent className="w-auto p-0">
+                      <PopoverContent className="w-auto p-1">
                         <Calendar
                           mode="single"
                           selected={date}
@@ -340,6 +362,7 @@ export default function InvoiceForm({ invoice = null, isOpen, onClose }) {
                       name="paymentTerms"
                       required
                       type="number"
+                      defaultValue="1"
                       value={formData.paymentTerms}
                       onValueChange={(value) => {
                         console.log(value);
@@ -364,7 +387,7 @@ export default function InvoiceForm({ invoice = null, isOpen, onClose }) {
                       </SelectTrigger>
                       <SelectContent>
                         <SelectGroup>
-                          {/* <SelectLabel>Days</SelectLabel> */}
+                          <SelectLabel>Days</SelectLabel>
                           <SelectItem value="1">Next 1 day</SelectItem>
                           <SelectItem value="7">Next 7 day</SelectItem>
                           <SelectItem value="14">Next 14 day</SelectItem>
@@ -383,7 +406,7 @@ export default function InvoiceForm({ invoice = null, isOpen, onClose }) {
               </div>
 
               <div>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div className="grid grid-cols-3 mt-10 md:grid-cols-2 gap-10 ">
                   {["street", "city", "postCode", "country"].map((field) => (
                     <div
                       key={field}
@@ -408,7 +431,7 @@ export default function InvoiceForm({ invoice = null, isOpen, onClose }) {
                         }
                         className={
                           isDarkMode
-                            ? "bg-[#1E2139] border-none px-4 py-5 text-white "
+                            ? "bg-[#1E2139] border-none md:px-4 p-1 md:py-5 text-white "
                             : ""
                         }
                       />
@@ -421,7 +444,7 @@ export default function InvoiceForm({ invoice = null, isOpen, onClose }) {
                   ))}
                 </div>
               </div>
-              <div>
+              <div className="mt-10">
                 <Label htmlFor="description">Description</Label>
                 <Input
                   id="description"
@@ -436,7 +459,7 @@ export default function InvoiceForm({ invoice = null, isOpen, onClose }) {
                   <p className="text-red-500 text-sm">{errors.description}</p>
                 )}
               </div>
-              <div>
+              <div className="my-10">
                 <h3 className="font-bold mb-2">Mahsulotlar</h3>
                 {formData.items.map((item, index) => (
                   <div
@@ -492,38 +515,35 @@ export default function InvoiceForm({ invoice = null, isOpen, onClose }) {
                     </div>
                     <div>
                       <Label htmlFor={`itemPrice${index}`}>Narxi</Label>
-                      <Input
-                        id={`itemPrice${index}`}
-                        type="number"
-                        min={0}
-                        value={item.price}
-                        onChange={(e) =>
-                          handleItemChange(
-                            index,
-                            "price",
-                            Number(e.target.value)
-                          )
-                        }
-                        className={
-                          isDarkMode
-                            ? "bg-[#1E2139] border-none text-white"
-                            : ""
-                        }
-                      />
+                      <div className="flex items-center gap-2">
+                        <Input
+                          id={`itemPrice${index}`}
+                          type="number"
+                          min={0}
+                          value={item.price}
+                          onChange={(e) =>
+                            handleItemChange(
+                              index,
+                              "price",
+                              Number(e.target.value)
+                            )
+                          }
+                          className={
+                            isDarkMode
+                              ? "bg-[#1E2139] border-none text-white"
+                              : ""
+                          }
+                        />
+                        <MdDelete
+                          onClick={() => handleRemoveItem(index)}
+                          className={`w-8 h-6 `}
+                        />
+                      </div>
                       {errors[`item${index}Price`] && (
                         <p className="text-red-500 text-sm">
                           {errors[`item${index}Price`]}
                         </p>
                       )}
-                    </div>
-                    <div className="flex items-end">
-                      <Button
-                        type="button"
-                        className={isDarkMode ? "bg-[#1E2139]" : ""}
-                        onClick={() => handleRemoveItem(index)}
-                      >
-                        <MdDelete />
-                      </Button>
                     </div>
                   </div>
                 ))}
@@ -531,7 +551,11 @@ export default function InvoiceForm({ invoice = null, isOpen, onClose }) {
                 <Button
                   type="button"
                   onClick={handleAddItem}
-                  className="w-full bg-gray-300 text-black mt-4 "
+                  className={`w-full  hover:opacity-55  py-6 mt-4 ${
+                    isDarkMode
+                      ? " text-[#888EB0] bg-[#252945] hover:text-black hover:bg-gray-400"
+                      : " text-[#7E88C3] bg-[#F9FAFE] hover:text-white hover:bg-gray-600"
+                  }`}
                 >
                   + Add New Item
                 </Button>
@@ -540,11 +564,11 @@ export default function InvoiceForm({ invoice = null, isOpen, onClose }) {
                 )}
               </div>
             </div>
-            <div className="flex justify-between space-x-4">
+            <div className="flex justify-between space-x-4 flex-wrap">
               <Button
                 type="button"
                 variant="secondary"
-                className="rounded-2xl bg-gray-300 p-6"
+                className="rounded-2xl hover:opacity-65 bg-gray-300 p-6"
                 onClick={onClose}
               >
                 Discard
@@ -554,16 +578,23 @@ export default function InvoiceForm({ invoice = null, isOpen, onClose }) {
                   <Button
                     type="button"
                     onClick={(e) => handleSubmit(e, true)}
-                    className="p-6 bg-gray-700 rounded-2xl "
+                    className="p-4 sm:p-6 bg-gray-700 rounded-2xl "
                   >
-                    Add as Draft
+                    <span className="hidden sm:block"> Add as</span> Draft
                   </Button>
                 )}
                 <Button
                   type="submit"
-                  className="bg-[#7C5DFA] hover:bg-purple-500 rounded-2xl p-6 "
+                  className="bg-[#7C5DFA] hover:bg-purple-500 rounded-2xl p-4  md:p-6 "
                 >
-                  {invoice ? "Save Changes" : "Save & Send"}
+                  {invoice ? (
+                    <span>Save Changes</span>
+                  ) : (
+                    <span>
+                      {" "}
+                      Save <span className="hidden sm:block"> & Send</span>
+                    </span>
+                  )}
                 </Button>
               </div>
             </div>

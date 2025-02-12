@@ -33,11 +33,11 @@ export default function InvoiceDetails() {
 
   return (
     <div
-      className={`min-h-screen md:pb-20 sm:pl-20 ${
+      className={`min-h-screen md:pb-20 md:pl-20 ${
         isDarkMode ? "bg-[#141625] text-white" : "bg-[#f8f8fb]"
       }`}
     >
-      <div className="max-w-3xl mx-auto p-6">
+      <div className="max-w-3xl mx-auto p-6 pb-0 ">
         {/* Back Button */}
         <button
           onClick={() => navigate("/")}
@@ -61,8 +61,8 @@ export default function InvoiceDetails() {
           rounded-lg shadow-lg p-6 mb-6 flex flex-wrap gap-4 justify-between items-center
         `}
         >
-          <div className="flex items-center gap-4">
-            <span className="text-gray-500">Status</span>
+          <div className="flex items-center gap-4 justify-between w-full sm:w-40">
+            <h2 className="text-gray-500 text-2xl">Status</h2>
             <div
               className={`
               px-4 py-2 rounded-md flex items-center gap-2
@@ -78,7 +78,7 @@ export default function InvoiceDetails() {
             </div>
           </div>
 
-          <div className="flex gap-4 flex-wrap">
+          <div className=" gap-4 flex-wrap hidden sm:flex">
             <Button
               variant="secondary"
               onClick={() => setIsEditMode(true)}
@@ -115,7 +115,7 @@ export default function InvoiceDetails() {
               </DialogContent>
             </Dialog>
 
-            {invoice.status !== "paid" && (
+            {invoice.status == "pending" && (
               <Button
                 onClick={() => handleStatusChange("paid")}
                 className="bg-[#7c5dfa] hover:bg-[#6c4feb]"
@@ -146,7 +146,7 @@ export default function InvoiceDetails() {
             </div>
           </div>
 
-          <div className="grid md:grid-cols-3 gap-8 mb-8">
+          <div className="grid md:grid-cols-3 grid-cols-2 gap-8 mb-8">
             <div>
               <div className="mb-8">
                 <p className="text-gray-500 mb-2">Invoice Date</p>
@@ -171,7 +171,7 @@ export default function InvoiceDetails() {
 
             <div>
               <p className="text-gray-500 mb-2">Sent to</p>
-              <p className="font-bold text-xs sm:text-base break-words">
+              <p className="font-bold  whitespace-nowrap break-words">
                 {invoice.clientEmail}
               </p>
             </div>
@@ -223,6 +223,56 @@ export default function InvoiceDetails() {
               </span>
             </div>
           </div>
+        </div>
+        <div className=" gap-4 justify-around flex-wrap sm:hidden sticky bottom-0 right-0 items-center content-center bg-[#1E2139] p-4 min-h-24 w-full flex">
+          <Button
+            variant="secondary"
+            onClick={() => setIsEditMode(true)}
+            className={
+              isDarkMode ? "bg-[#252945] px-8 py-6 rounded-3xl text-white" : ""
+            }
+          >
+            Edit
+          </Button>
+
+          <Dialog open={showDeleteDialog} onOpenChange={setShowDeleteDialog}>
+            <DialogTrigger asChild>
+              <Button className="px-8 py-6 rounded-3xl" variant="destructive">
+                Delete
+              </Button>
+            </DialogTrigger>
+            <DialogContent
+              className={isDarkMode ? "bg-[#1e2139] text-white" : ""}
+            >
+              <DialogHeader>
+                <DialogTitle>Confirm Deletion</DialogTitle>
+              </DialogHeader>
+              <p className="py-4">
+                Are you sure you want to delete invoice #{id}? This action
+                cannot be undone.
+              </p>
+              <div className="flex justify-end gap-4">
+                <Button
+                  variant="secondary"
+                  onClick={() => setShowDeleteDialog(false)}
+                >
+                  Cancel
+                </Button>
+                <Button variant="destructive" onClick={handleDelete}>
+                  Delete
+                </Button>
+              </div>
+            </DialogContent>
+          </Dialog>
+
+          {invoice.status == "pending" && (
+            <Button
+              onClick={() => handleStatusChange("paid")}
+              className="bg-[#7c5dfa] rounded-3xl hover:bg-[#6c4feb] p-6"
+            >
+              Paid
+            </Button>
+          )}
         </div>
       </div>
 
