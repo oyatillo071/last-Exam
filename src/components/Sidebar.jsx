@@ -11,7 +11,7 @@ export default function Sidebar() {
   return (
     <div
       className={`
-        w-full h-16 md:rounded-r-3xl rounded-none flex items-center justify-between pr-6 md:w-16 md:min-h-screen md:p-0 md:flex-col md:fixed 
+        w-full h-16 md:rounded-r-3xl rounded-none z-[9999] flex items-center justify-between pr-6 md:w-16 md:min-h-screen md:p-0 md:flex-col md:fixed 
         ${isDarkMode ? "bg-[#1e2139]" : "bg-[#373b53]"}
       `}
     >

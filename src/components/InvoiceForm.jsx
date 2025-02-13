@@ -223,7 +223,7 @@ export default function InvoiceForm({ invoice = null, isOpen, onClose }) {
       <Sheet open={isOpen} onOpenChange={onClose}>
         <SheetContent
           side="left"
-          className={`w-full md:max-w-[720px] overflow-y-auto ${
+          className={`w-full md:max-w-[720px] p-6 pt-20 md:pt-6 md:pl-20 ${
             isDarkMode ? "bg-[#141625] text-white" : "bg-white"
           }`}
         >
@@ -245,8 +245,8 @@ export default function InvoiceForm({ invoice = null, isOpen, onClose }) {
             onSubmit={(e) => handleSubmit(e, false)}
             className="space-y-6 mt-6"
           >
-            <div className="h-[80vh] py-6 px-2  overflow-y-scroll">
-              <div className="space-y-4  ">
+            <div className="h-[75vh] py-6 px-2 no-scrollbar overflow-y-scroll">
+              <div className="space-y-4 ">
                 <div>
                   <h3 className="font-extralight text-[#7C5DFA] mb-10">
                     Bill From
@@ -557,7 +557,7 @@ export default function InvoiceForm({ invoice = null, isOpen, onClose }) {
                         />
                         <MdDelete
                           onClick={() => handleRemoveItem(index)}
-                          className={`w-8 h-6 `}
+                          className={`w-8 h-6 text-red-700  grayscale hover:grayscale-0`}
                         />
                       </div>
                       {errors[`item${index}Price`] && (
@@ -585,11 +585,11 @@ export default function InvoiceForm({ invoice = null, isOpen, onClose }) {
                 )}
               </div>
             </div>
-            <div className="flex justify-between space-x-4 flex-wrap">
+            <div className="flex justify-between space-x-4 flex-wrap pb-1">
               <Button
                 type="button"
                 variant="secondary"
-                className="rounded-2xl hover:opacity-65 bg-gray-300 p-6"
+                className="rounded-2xl hover:opacity-65 bg-gray-300 p-4 md:p-6"
                 onClick={onClose}
               >
                 Discard

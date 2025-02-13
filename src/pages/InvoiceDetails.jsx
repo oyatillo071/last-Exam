@@ -82,14 +82,16 @@ export default function InvoiceDetails() {
             <Button
               variant="secondary"
               onClick={() => setIsEditMode(true)}
-              className={`rounded-3xl   text-white bg-[#252945] `}
+              className={`rounded-3xl   text-white hover:bg-[#313658] bg-[#252945] `}
             >
               Edit
             </Button>
 
             <Dialog open={showDeleteDialog} onOpenChange={setShowDeleteDialog}>
               <DialogTrigger asChild>
-                <Button variant="destructive">Delete</Button>
+                <Button className="rounded-3xl" variant="destructive">
+                  Delete
+                </Button>
               </DialogTrigger>
               <DialogContent
                 className={isDarkMode ? "bg-[#1e2139] text-white" : ""}
