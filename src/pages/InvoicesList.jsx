@@ -84,7 +84,10 @@ export default function InvoicesList() {
               <h1 className="text-[20px]  mb-[24px] font-bold animate-slide-down ">
                 There is nothing here
               </h1>
-              <p className=" text-[12px] animate-slide-down ">
+              <p
+                onClick={() => setIsNewInvoiceOpen(true)}
+                className=" text-[12px] animate-slide-down "
+              >
                 Create an invoice by clicking the <br />
                 <span className="font-bold"> New</span> button and get started
               </p>
