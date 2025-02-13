@@ -81,10 +81,10 @@ export default function InvoicesList() {
                 src={EmptyImg}
                 alt="empty logo"
               />
-              <h1 className="text-[20px] text-[#0C0E16] mb-[24px] font-bold animate-slide-down dark:text-white">
+              <h1 className="text-[20px]  mb-[24px] font-bold animate-slide-down ">
                 There is nothing here
               </h1>
-              <p className="text-[#888EB0] text-[12px] animate-slide-down dark:text-[#DFE3FA]">
+              <p className=" text-[12px] animate-slide-down ">
                 Create an invoice by clicking the <br />
                 <span className="font-bold"> New</span> button and get started
               </p>

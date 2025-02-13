@@ -263,11 +263,16 @@ export default function InvoiceDetails() {
               <div className="flex justify-end gap-4">
                 <Button
                   variant="secondary"
+                  className="rounded-3xl"
                   onClick={() => setShowDeleteDialog(false)}
                 >
                   Cancel
                 </Button>
-                <Button variant="destructive" onClick={handleDelete}>
+                <Button
+                  variant="destructive"
+                  className="rounded-3xl"
+                  onClick={handleDelete}
+                >
                   Delete
                 </Button>
               </div>
