@@ -120,7 +120,7 @@ export default function InvoiceDetails() {
             {invoice.status == "pending" && (
               <Button
                 onClick={() => handleStatusChange("paid")}
-                className="bg-[#7c5dfa] hover:bg-[#6c4feb]"
+                className="bg-[#7c5dfa] rounded-3xl hover:bg-[#6c4feb]"
               >
                 Mark as Paid
               </Button>
@@ -239,14 +239,14 @@ export default function InvoiceDetails() {
           <Button
             variant="secondary"
             onClick={() => setIsEditMode(true)}
-            className={`px-8 py-6 bg-[#252945] rounded-3xl text-white`}
+            className={`p-4 bg-[#252945] rounded-3xl text-white`}
           >
             Edit
           </Button>
 
           <Dialog open={showDeleteDialog} onOpenChange={setShowDeleteDialog}>
             <DialogTrigger asChild>
-              <Button className="px-8 py-6 rounded-3xl" variant="destructive">
+              <Button className="p-4 rounded-3xl" variant="destructive">
                 Delete
               </Button>
             </DialogTrigger>
@@ -277,9 +277,9 @@ export default function InvoiceDetails() {
           {invoice.status == "pending" && (
             <Button
               onClick={() => handleStatusChange("paid")}
-              className="bg-[#7c5dfa] rounded-3xl hover:bg-[#6c4feb] p-6"
+              className="bg-[#7c5dfa] rounded-3xl hover:bg-[#6c4feb] p-3"
             >
-              Paid
+              Mark as Paid
             </Button>
           )}
         </div>
