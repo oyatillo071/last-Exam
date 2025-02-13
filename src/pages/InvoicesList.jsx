@@ -57,7 +57,7 @@ export default function InvoicesList() {
             <Button
               onClick={() => setIsNewInvoiceOpen(true)}
               className={`
-                md:p-6 rounded-full hover:bg-purple-500 font-bold flex items-center gap-2
+                md:p-6 py-6 rounded-full hover:bg-purple-500 font-bold flex items-center gap-2
                 ${
                   isDarkMode
                     ? "bg-[#7c5dfa] text-white "
@@ -105,7 +105,9 @@ export default function InvoicesList() {
                   #{invoice.id}
                 </span>
                 <span className="text-gray-500">Due {invoice.paymentDue}</span>
-                <span className="hidden sm:block">{invoice.clientName}</span>
+                <span className="hidden sm:block line-clamp-1">
+                  {invoice.clientName}
+                </span>
                 <span className="text-xl sm:hidden  font-bold">
                   £ {invoice.total.toFixed(2)}
                 </span>
@@ -115,7 +117,9 @@ export default function InvoicesList() {
                 <span className="text-xl hidden sm:block font-bold">
                   £ {invoice.total.toFixed(2)}
                 </span>
-                <span className="sm:hidden">{invoice.clientName}</span>
+                <span className="sm:hidden line-clamp-1">
+                  {invoice.clientName}
+                </span>
                 <div
                   className={`
                   px-4 py-2 w-28 rounded-md flex items-center gap-2 
